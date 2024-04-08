@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import carImage from "./assets/car.png";
 import { coordinatess } from "./data";
+import RotatedMarker from "./rotatedMarker";
 
 function App() {
   const myMap = useRef(null);
@@ -29,7 +30,11 @@ function App() {
       const carMarker = L.marker([28.56467260042718, 77.3354040437753], {
         icon: carIcon,
         draggable: true,
+        // setRotationAngle: 45,
       }).addTo(map);
+
+      // const iconElement = document.querySelector(".leaflet-marker-icon");
+      // iconElement.style.transform = `rotate(-90deg)`;
 
       carMarkerRef.current = carMarker;
 
@@ -46,6 +51,7 @@ function App() {
     const polyline = polylineRef.current;
 
     const latlngs = polyline.getLatLngs();
+    // console.log("latlngs -> ", latlngs);
     const duration = 10000; // Duration of animation in milliseconds
     const steps = 100; // Number of steps for animation
 
@@ -56,7 +62,6 @@ function App() {
 
     // Iterating through each step for smoother animation
     for (let i = 0; i <= steps; i++) {
-      
       //finding the start and end idx along the polyline...
       const index = (i / steps) * (latlngs.length - 1);
       const startIndex = Math.floor(index);
@@ -77,17 +82,21 @@ function App() {
         startLatLng.lng + (endLatLng.lng - startLatLng.lng) * ratio
       );
 
-      console.log(
-        `Angle between coordinates ${startIndex} and ${endIndex}: ${angle}`
-      );
+      // console.log(
+      //   `Angle between coordinates ${startIndex} and ${endIndex}: ${angle}`
+      // );
 
       carMarker.setLatLng(interpolatedLatLng);
+      // carMarker.setRotationAngle(`${angle}`);
 
       //for rotation...
       const iconElement = document.querySelector(".leaflet-marker-icon");
+
+      // iconElement.style.border = "1px solid red";
+      carMarker.setRotationAngle(angle);
       // iconElement.style.transform = `rotate(${angle}deg)`;
 
-      // Delay for the next step
+      // Delay for the next step...
       await new Promise((resolve) => setTimeout(resolve, stepDuration));
     }
     setIsMoving(false);

@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 25px;
+ 
 }
 
 .move-button button {
@@ -20,7 +21,3 @@
   color: black;
   cursor: pointer;
 }
-
- .car {
-  height: 10px;
- }
